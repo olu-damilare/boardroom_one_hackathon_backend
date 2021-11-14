@@ -23,7 +23,7 @@ public class BgRemovalServiceImpl implements BgRemovalService {
                                 .addTextBody("size", "auto")
                                 .build()
                 ).execute();
-      return  response.returnContent().asBytes();
+        return response.returnContent().asBytes();
 
     }
 
