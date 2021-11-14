@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/upload")
@@ -24,9 +26,9 @@ public class ImageController {
         try {
             log.info("this worked");
             return new ResponseEntity<>(imageCropServices.uploadImage(file), HttpStatus.OK);
-        }catch (Exception ex){
-            log.error("didn't work -> {}", imageCropServices.uploadImage(file) );
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
+            log.error("didn't work -> {}", imageCropServices.uploadImage(file));
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
