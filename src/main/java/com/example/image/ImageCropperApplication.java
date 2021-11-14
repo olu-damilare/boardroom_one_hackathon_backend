@@ -16,7 +16,7 @@ public class ImageCropperApplication {
     }
 
     @Bean
-    public Cloudinary setUp(){
+    public Cloudinary setUp() {
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "damilare",
                 "api_key", "737177149221658",
