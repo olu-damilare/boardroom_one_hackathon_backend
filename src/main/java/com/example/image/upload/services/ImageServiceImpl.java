@@ -1,6 +1,7 @@
 package com.example.image.upload.services;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 import com.cloudinary.*;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageServiceImpl implements ImageCropServices {
 
     private Cloudinary cloudinary;
+
     @Autowired
     private BgRemovalService bgRemovalService;
 
@@ -25,6 +27,14 @@ public class ImageServiceImpl implements ImageCropServices {
 
     @Override
     public Map<?, ?> uploadImage(MultipartFile file) throws IOException {
+        if(file == null){
+            throw new IllegalArgumentException("file cannot be null");
+        }
+
+        if(!isValidFileType(file)){
+            throw new IllegalArgumentException("Invalid file type. Image type should be either jpg, jpeg or png");
+        }
+
         byte[] byteContent = bgRemovalService.removeBg(file);
 
         Map<?, ?> imageProperties = ObjectUtils.asMap("transformation", new Transformation()
@@ -36,7 +46,18 @@ public class ImageServiceImpl implements ImageCropServices {
                 .chain()
                 .opacity(50).chain());
 
-         return cloudinary.uploader().upload(byteContent, imageProperties);
+        return cloudinary.uploader().upload(byteContent, imageProperties);
+    }
+
+    public boolean isValidFileType(MultipartFile file){
+        String validFileType = "jpg, jpeg, png";
+        System.out.println(file.getOriginalFilename());
+        String[] fileNameContent = file.getOriginalFilename().split("\\.");
+        System.out.println(Arrays.toString(fileNameContent));
+        String fileType = fileNameContent[fileNameContent.length - 1];
+        System.out.println(fileType);
+
+        return validFileType.contains(fileType.toLowerCase());
     }
 
 
